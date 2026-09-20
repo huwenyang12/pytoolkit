@@ -1,0 +1,10 @@
+{
+    "feishu":{
+        "app_id":"xxxx",
+        "app_secret":"xxxx",
+        "webhook":"xxxx"
+    },
+    "wecom":{
+        "webhook":"xxxx"
+    }
+}

@@ -1,3 +1,6 @@
+# 企业微信消息通知封装
+
+
 import base64
 import hashlib
 import requests

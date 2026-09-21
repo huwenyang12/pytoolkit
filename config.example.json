@@ -6,5 +6,15 @@
     },
     "wecom":{
         "webhook":"xxxx"
+    },
+    "mail":{
+        "email_addr":"hwy0821@yeah.net",
+        "password":"xxxxxxx",
+        "imap_server":"imap.yeah.net",
+        "imap_port":993,
+        "download_dir":"attachments",
+        "interval":30,
+        "subject_keywords":["巡检报告","基础资源"],
+        "attachment_keywords":[".pdf",".xlsx"]
     }
 }

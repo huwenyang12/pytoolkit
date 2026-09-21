@@ -29,3 +29,22 @@ def retry(times=3,delay=1,exceptions=(Exception,)):
                     time.sleep(delay)
         return wrapper
     return decorator
+
+
+
+def clear_old_files(directory,days=15):
+    """
+    删除目录中超过指定天数的文件
+    directory: 要清理的目录路径
+    days: 文件保留天数
+    """
+    directory = Path(directory)
+    if not directory.exists():
+        return 0
+    expire_time = time.time()-days*86400
+    count = 0
+    for file in directory.iterdir():
+        if file.is_file() and file.stat().st_mtime < expire_time:
+            file.unlink()
+            count += 1
+    return count

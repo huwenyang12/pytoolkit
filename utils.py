@@ -31,6 +31,17 @@ def retry(times=3,delay=1,exceptions=(Exception,)):
     return decorator
 
 
+def timer(func):
+    """记录函数执行耗时"""
+    @wraps(func)
+    def wrapper(*args,**kwargs):
+        start = time.time()
+        try:
+            return func(*args,**kwargs)
+        finally:
+            print(f"{func.__name__} 执行耗时: {time.time()-start:.2f}s")
+    return wrapper
+
 
 def clear_old_files(directory,days=15):
     """

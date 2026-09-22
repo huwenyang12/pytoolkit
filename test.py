@@ -6,7 +6,7 @@ from wecom import WeComBot
 from screen_recorder import ScreenRecorder
 from screenshot import capture
 
-from utils import get_config, retry, clear_old_files
+from utils import get_config, retry, clear_old_files, timer
 
 from mail import MailMonitor
 
@@ -26,7 +26,7 @@ from mail import MailMonitor
 
 
 
-
+@timer
 @retry()
 def run_task(recorder, feishu_bot):
     try:

@@ -3,6 +3,8 @@
 
 import os
 import requests
+import traceback
+from datetime import datetime
 
 class FeishuBot:
     def __init__(self,webhook,app_id,app_secret):
@@ -28,6 +30,42 @@ class FeishuBot:
         result = response.json()
         if result.get("code",0) != 0:
             raise RuntimeError(f"飞书消息发送失败: {result}")
+
+
+    def send_exception(self, title="程序异常", image_path=None):
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        details = f"时间：{now}\n\n错误信息：\n{traceback.format_exc()}"
+
+        if image_path:
+            try:
+                image_key = self._upload_image(image_path)
+                payload = {
+                    "msg_type": "post",
+                    "content": {
+                        "post": {
+                            "zh_cn": {
+                                "title": title,
+                                "content": [
+                                    [{"tag": "text", "text": details}],
+                                    [{"tag": "img", "image_key": image_key}],
+                                ],
+                            }
+                        }
+                    },
+                }
+                response = requests.post(self.webhook, json=payload, timeout=10)
+                response.raise_for_status()
+                result = response.json()
+                if result.get("code", result.get("StatusCode")) != 0:
+                    raise RuntimeError("飞书图文告警发送失败")
+                return
+            except Exception as exc:
+                print(f"飞书图文告警失败，改发文字：{type(exc).__name__}")
+
+        try:
+            self.send_text(f"{title}\n\n{details}")
+        except Exception as exc:
+            print(f"飞书文字告警失败：{type(exc).__name__}")
 
 
     def _get_token(self):
@@ -57,6 +95,14 @@ class FeishuBot:
         if result.get("code") != 0:
             raise RuntimeError(f"飞书图片上传失败: {result}")
         return result["data"]["image_key"]
+
+
+
+fs = FeishuBot(
+    webhook="https://open.feishu.cn/open-apis/bot/v2/hook/xxxxx",
+    app_id="xxxxx",
+    app_secret="xxxxx"
+    )
     
     
 
